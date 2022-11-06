@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dice Roll Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js">
+    </script>
+    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+    </svg>
+    <style>
+
+        body {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        #navbar {
+            position: fixed; /* Make it stick/fixed */
+        }
+
+        .custom {
+            margin: 10px 10px 10px 10px;
+        }
+
+        .dis {
+            animation-name: spin;
+            animation-duration: 1000ms;
+            animation-iteration-count: infinite;
+        }
+
+        .rotate {
+            animation-name: spin, shrink;
+            animation-duration: 1000ms;
+            animation-iteration-count: initial;
+        }
+
+        @-ms-keyframes spin {
+            from {
+                -ms-transform: rotate(0deg);
+            }
+            to {
+                -ms-transform: rotate(360deg);
+            }
+        }
+
+
+        @-webkit-keyframes spin {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes shrink {
+            from {
+                width: 0px;
+                height: 0px;
+            }
+            to {
+                padding-top: 50px;
+                width: 300px;
+                height: 350px;
+            }
+        }
+
+
+        tr {
+            text-align: center;
+        }
+
+        .btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+            background-color: #343741 !important;
+            border: black;
+        }
+
+
+        #roll-button {
+            margin: 0 20px 0 20px;
+            padding-top: 175px;
+        }
+
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: auto auto auto;
+            padding: 50px 100px 50px 100px;
+        }
+
+
+        .grid-container > div {
+            text-align: center;
+            font-size: 25px;
+        }
+        .fixed_header thead {
+            background-color: #343741;
+        }
+        .fixed_header {
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
+        }
+        .fixed_header tbody {
+            display: block;
+            width: 100%;
+            overflow: auto;
+            max-height: 275px;
+        }
+        .fixed_header thead tr {
+            display: block;
+        }
+
+        .fixed_header td {
+            width: 110000px;
+        }
+
+        #blah{
+            padding-left: 45.5% ;
+        }
+
+    </style>
+    <script>
+
+
+        const sleep = (time) => {
+            return new Promise((resolve) => setTimeout(resolve, time))
+        }
+
+        let diceGame = {
+            dice: [
+                {"Img": 'D1.png', "Value": 1},
+                {"Img": 'D2.png', "Value": 2},
+                {"Img": 'D3.png', "Value": 3},
+                {"Img": 'D4.png', "Value": 4},
+                {"Img": 'D5.png', "Value": 5},
+                {"Img": 'D6.png', "Value": 6}
+            ],
+
+            winCt: 0,
+
+            rollCT : 0,
+
+            userRoll: [],
+
+            prevRolls: [],
+
+            prevRollsDisplay: [],
+
+            resetPrev: function () {
+                this.prevRolls = []
+            },
+
+            resetPrev: function () {
+                this.prevRollsDisplay = []
+            },
+
+            resetRoll: function () {
+                this.userRoll = []
+            },
+
+            roll() {
+                while (this.userRoll.length < 2) {
+                    let random = Math.floor(Math.random() * this.dice.length);
+                    let die = diceGame.dice[random]
+                    this.userRoll.push(die)
+                    this.prevRolls.push(die)
+                    this.prevRollsDisplay.push(die)
+                }
+                this.rollCT++;
+            },
+
+            checkGameWin() {
+                if (this.userRoll[0] == this.userRoll[1]) {
+                    this.winCt++;
+                    setTimeout(() => {
+                        alert("You rolled a match! You WIN!")
+                    }, 100);
+                }
+                UI.displayStats();
+            }
+        }
+
+        const doSomething = async () => {
+            for (let i = 0; i < 1; i++) {
+                let random = Math.floor(Math.random() * diceGame.dice.length);
+                let random1 = Math.floor(Math.random() * diceGame.dice.length);
+                document.getElementById("roll-button").innerHTML =
+                    `<button type="button"
+                        onclick="doSomething()"
+                        class="btn btn-primary btn-lg dis">Roll
+                    </button>`
+                document.getElementById("dice-1").innerHTML = `<img class="rotate" id="displayElement" src="diceImgs/${diceGame.dice[random].Img}" height="350" width="300" alt="dice" style="padding-top: 50px">`
+                UI.backgroundColor();
+                document.getElementById("dice-2").innerHTML = `<img class="rotate" id="displayElement" src="diceImgs/${diceGame.dice[random1].Img}" height="350" width="300" alt="dice" style="padding-top: 50px">`
+                await sleep(1000)
+            }
+            await sleep(100)
+            diceGame.roll()
+            UI.displayDice();
+            UI.displayPrev();
+            diceGame.checkGameWin()
+            diceGame.resetRoll();
+        }
+
+        let UI = {
+            checkToggle: function () {
+                if ($(".btn-group-toggle").button("toggle")) {
+                    alert("blah")
+                }
+            },
+
+            backgroundColor: function () {
+                var x = Math.floor(Math.random() * 256);
+                var y = Math.floor(Math.random() * 256);
+                var z = Math.floor(Math.random() * 256);
+                var bgColor = "rgb(" + x + "," + y + "," + z + ")";
+                console.log(bgColor);
+
+                document.body.style.background = bgColor;
+            },
+
+            displayDice: function () {
+                document.getElementById('dice-1').innerHTML = `<img src="diceImgs/D${diceGame.userRoll[0].Value}.png" height="350" width="300" alt="dice" style="padding-top: 50px">`
+                document.getElementById('dice-2').innerHTML = `<img src="diceImgs/D${diceGame.userRoll[1].Value}.png" height="350" width="300" alt="dice" style="padding-top: 50px">`
+            },
+
+            displayStats: function () {
+                document.getElementById("winCT").innerHTML = `Wins: ${diceGame.winCt} &nbsp | &nbsp; Rolls: ${diceGame.rollCT}`
+            },
+
+            displayPrev: function () {
+                let table = document.getElementById("tbod");
+                let row = table.insertRow(0);
+                let cell1 = row.insertCell(0);
+                cell1.innerHTML = `<img src="diceImgs/${diceGame.prevRollsDisplay[0].Img}" alt="" height="60" width="60">`
+                let cell2 = row.insertCell(1);
+                cell2.innerHTML = `<img src="diceImgs/${diceGame.prevRollsDisplay[1].Img}" alt="" height="60" width="60">`
+
+                diceGame.resetPrev();
+            },
+        }
+
+    </script>
+</head>
+<body onchange="UI.checkToggle()" onload="UI.backgroundColor()">
+
+<!--table-->
+<table class="table table-bordered table-dark scrollingTable" id="navbar">
+    <thead>
+
+    <tr>
+        <th id="winCT">Wins: &nbsp; | &nbsp; Rolls:</th>
+    </tr>
+
+    </thead>
+</table>
+<!--table-->
+
+<!--dice-->
+<div class="grid-container">
+
+
+    <div id="dice-1">
+        <img src="diceImgs/D1.png" height="350" width="300" alt="dice" style="padding-top: 50px">
+    </div>
+    <div id="roll-button">
+        <button type="button"
+                onclick="doSomething()"
+                class="btn btn-primary btn-lg">Roll
+        </button>
+    </div>
+    <div id="dice-2">
+        <img src="diceImgs/D6.png" height="350" width="300" alt="dice" style="padding-top: 50px">
+    </div>
+
+    <!--table-->
+
+
+</div>
+
+<div class="grid-container2">
+    <table class="table table-bordered table-dark scrollingTable fixed_header">
+
+        <thead>
+
+        <tr id="blah">
+            <th colspan="2" scope="">Previous Rolls</th>
+        </tr>
+
+        </thead>
+
+        <tbody id="tbod">
+
+        </tbody>
+
+    </table>
+</div>
+<footer class=" custom text-center text-white"
+        style="background-color: #f1f1f1; margin: 0 0 0 0 ; position: relative;top:-20px;
+        padding-bottom: 10px">
+    <!-- Copyright -->
+    <div class="text-center text-dark p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2022 Copyright:
+        <a>Nick Albert</a>
+    </div>
+    <!-- Copyright -->
+</footer>
+
+</body>
+</html>
